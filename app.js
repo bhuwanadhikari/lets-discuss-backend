@@ -21,11 +21,6 @@ mongoose
     .connect(db, { useNewUrlParser: true,  })
     .then(() => console.log("Connected to the mongoose"))
     .catch(err => console.log(err));
-
-
-
-
-
 mongoose.set('useFindAndModify', false);
 
 
