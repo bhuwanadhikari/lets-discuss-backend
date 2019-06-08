@@ -6,6 +6,7 @@ const Post = require('./models/Post');
 
 
 const app = express();
+const router = express.Router();
 
 //body parser middleware 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,7 +27,7 @@ mongoose.set('useFindAndModify', false);
 
 
 //add posts
-app.post('/add-post', (req, res) => {
+router.post('/add-post', (req, res) => {
     const newPost = new Post({
         postText: req.body.postText
     });
@@ -39,7 +40,7 @@ app.post('/add-post', (req, res) => {
 });
 
 //like post
-app.post('/like', (req, res) => {
+router.post('/like', (req, res) => {
     // console.log(req.body);
     Post.findByIdAndUpdate(req.body.postId, {$inc:{likesCount: 1}})
     .then(post => post._id)
@@ -49,7 +50,7 @@ app.post('/like', (req, res) => {
 });
 
 //comment on post
-app.post('/comment', (req, res) => {
+router.post('/comment', (req, res) => {
     console.log("")
     Post.findByIdAndUpdate(req.body.postId, {$push:{comments: req.body.commentValue}})
     .then(post => post._id)
@@ -59,7 +60,7 @@ app.post('/comment', (req, res) => {
 });
 
 //get all post
-app.get('/get-all-posts', (req, res) => {
+router.get('/get-all-posts', (req, res) => {
     Post.find()
     .then(allPosts => {
         res.json(allPosts);
