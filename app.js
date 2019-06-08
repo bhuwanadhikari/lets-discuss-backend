@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 
 const Post = require('./models/Post');
 
-
 const app = express();
 
 //body parser middleware 
@@ -14,15 +13,14 @@ app.use(bodyParser.json());
 
 //database
 const db = require('./config/keys').mongoURI;
-
-
-//connection to database
 mongoose
     .connect(db, { useNewUrlParser: true,  })
     .then(() => console.log("Connected to the mongoose"))
     .catch(err => console.log(err));
 mongoose.set('useFindAndModify', false);
 
+
+//starting point
 app.get('/', (req, res) => {
     res.json({msg: "Success"})
 });
@@ -35,8 +33,8 @@ app.post('/add-post', (req, res) => {
 
     // console.log(newPost);
     newPost.save()
-    .then(post => res.json(post))
-    .catch(err => console.log(err));
+    .then(post => res.status(200).json(post))
+    .catch(err => res.status(400).json(err));
 
 });
 
@@ -46,8 +44,8 @@ app.post('/like', (req, res) => {
     Post.findByIdAndUpdate(req.body.postId, {$inc:{likesCount: 1}})
     .then(post => post._id)
     .then(_id => Post.findById(_id))
-    .then(post => res.json(post))
-    .catch(err => console.log(err));
+    .then(post => res.status(200).json(post))
+    .catch(err => res.status(400).json(err));
 });
 
 //comment on post
@@ -56,17 +54,17 @@ app.post('/comment', (req, res) => {
     Post.findByIdAndUpdate(req.body.postId, {$push:{comments: req.body.commentValue}})
     .then(post => post._id)
     .then(_id => Post.findById(_id))
-    .then(post => res.json(post))
-    .catch(err => console.log(err));
+    .then(post => res.status(200).json(post))
+    .catch(err => res.status(400).json(err));
 });
 
 //get all post
 app.get('/get-all-posts', (req, res) => {
     Post.find()
     .then(allPosts => {
-        res.json(allPosts);
+        res.status(200).json(allPosts);
     })
-    .catch(err => console.log(err));
+    .catch(err => res.status(400).json(err));
 });
 
 
