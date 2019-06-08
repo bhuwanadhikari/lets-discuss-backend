@@ -6,7 +6,6 @@ const Post = require('./models/Post');
 
 
 const app = express();
-const router = express.Router();
 
 //body parser middleware 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,10 +23,13 @@ mongoose
     .catch(err => console.log(err));
 mongoose.set('useFindAndModify', false);
 
-
+//Homepage
+app.get('/', (req, res) => {
+    res.json({msg: "Success"});
+});
 
 //add posts
-router.post('/add-post', (req, res) => {
+app.post('/add-post', (req, res) => {
     const newPost = new Post({
         postText: req.body.postText
     });
@@ -40,7 +42,7 @@ router.post('/add-post', (req, res) => {
 });
 
 //like post
-router.post('/like', (req, res) => {
+app.post('/like', (req, res) => {
     // console.log(req.body);
     Post.findByIdAndUpdate(req.body.postId, {$inc:{likesCount: 1}})
     .then(post => post._id)
@@ -50,7 +52,7 @@ router.post('/like', (req, res) => {
 });
 
 //comment on post
-router.post('/comment', (req, res) => {
+app.post('/comment', (req, res) => {
     console.log("")
     Post.findByIdAndUpdate(req.body.postId, {$push:{comments: req.body.commentValue}})
     .then(post => post._id)
@@ -60,7 +62,7 @@ router.post('/comment', (req, res) => {
 });
 
 //get all post
-router.get('/get-all-posts', (req, res) => {
+app.get('/get-all-posts', (req, res) => {
     Post.find()
     .then(allPosts => {
         res.json(allPosts);
