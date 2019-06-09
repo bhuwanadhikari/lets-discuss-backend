@@ -37,7 +37,6 @@ app.post('/add-post', (req, res) => {
 
     // console.log(newPost);
     newPost.save()
-    .then(post => {...post, message: "Your post has been added"})
     .then(post => res.status(200).json(post))
     .catch(err => res.status(400).json(err));
 
@@ -49,7 +48,6 @@ app.post('/clap', (req, res) => {
     Post.findByIdAndUpdate(req.body.postId, {$inc:{clapsCount: 1}})
     .then(post => post._id)
     .then(_id => Post.findById(_id))
-    .then(post => {...post, message: "Your clap has been submitted"})
     .then(post => res.status(200).json(post))
     .catch(err => res.status(400).json(err));
 });
@@ -60,7 +58,6 @@ app.post('/comment', (req, res) => {
     Post.findByIdAndUpdate(req.body.postId, {$push:{comments: req.body.commentValue}})
     .then(post => post._id)
     .then(_id => Post.findById(_id))
-    .then(post => {...post, message: "Your comment has been submitted"})
     .then(post => res.status(200).json(post))
     .catch(err => res.status(400).json(err));
 });
