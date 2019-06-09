@@ -42,10 +42,10 @@ app.post('/add-post', (req, res) => {
 
 });
 
-//like post
-app.post('/like', (req, res) => {
+//clap post
+app.post('/clap', (req, res) => {
     // console.log(req.body);
-    Post.findByIdAndUpdate(req.body.postId, {$inc:{likesCount: 1}})
+    Post.findByIdAndUpdate(req.body.postId, {$inc:{clapsCount: 1}})
     .then(post => post._id)
     .then(_id => Post.findById(_id))
     .then(post => res.status(200).json(post))

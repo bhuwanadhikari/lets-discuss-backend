@@ -7,7 +7,7 @@ const PostSchema = new Schema({
     comments: [{
         type: String,
     }],
-    likesCount: {type:Number, default: 0}
+    clapsCount: {type:Number, default: 0}
 });
 
 module.exports = mongoose.model('Post', PostSchema);
